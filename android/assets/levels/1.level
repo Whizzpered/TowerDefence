@@ -1,0 +1,34 @@
+ways
+ way0
+  point0
+   x = 3
+   y = 3
+  point1
+   x = 0
+   y = 3
+  point2
+   x = 0
+   y = 15
+  point3
+   x = 6
+   y = 15
+  point4
+   x = 6
+   y = 8
+  point5
+   x = 4
+   y = 8
+  point6
+   x = 4
+   y = 3
+waves
+ wave0
+  way = 0
+  eliteSlime = 5
+  slime = 50
+  eliteSlime = 5
+ wave1
+ way = 0
+  eliteSlime = 5
+  slime = 50
+  eliteSlime = 5
