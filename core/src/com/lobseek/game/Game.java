@@ -47,7 +47,6 @@ public class Game extends Stage {
     public Game game = this;
     public Tile[][] tiles = new Tile[64][32];
     public ShapeRenderer sr;
-    boolean drag;
     TouchHandlerExample tmp;
 
     public Array<Shell> shells = new Array<Shell>();
@@ -137,38 +136,23 @@ public class Game extends Stage {
         initGUI();
     }
 
+    float s = 0;
+
     public void initGUI() {
         tmp.gui = new Container() {
             @Override
             public void touchUp(Touch touch) {
-                if (!drag) {
-                    Point p = toWorldCoors(touch.getX(), touch.getY());
-                    float x = p.getX();
-                    float y = p.getY();
-                    x = (int) (x / 64);
-                    y = (int) (y / 32);
-                    Tile tile = tiles[(int) y][(int) x];
-                    if (!tile.free) {
-                        Tower t = getTower((int) x, (int) y);
-                        t.tapped = !t.tapped;
-                        p = toScreenCoors(x * 64 + 32, (y + 1) * 32);
-                        setShop(t, p.getX(), p.getY());
-                    } else if (tile.buildable) {
-                        if (gold >= BasicTower.fixedprice) {
-                            BasicTower t = new BasicTower(x, y);
-                            addEntity(t);
-                            gold -= BasicTower.fixedprice;
-                            tile.free = false;
-                        }
-                    }
+                if (s<=20) {
+                    tap(touch);
                 } else {
-                    drag = false;
+                    s=0;
                 }
             }
 
             @Override
             public void touchDragged(Touch touch) {
-                drag = true;
+                float ds = (float)Math.sqrt(Math.pow(touch.getDx(),2)+Math.pow(touch.getDy(),2));
+                s+=ds;
                 camera.translate(-touch.getDx() / 1.5f, -touch.getDy() / 1.5f);
             }
 
@@ -180,6 +164,29 @@ public class Game extends Stage {
 
                 while (shop.size > 0) {
                     tmp.gui.remove(shop.pop());
+                }
+            }
+
+            @Override
+            public void tap(Touch touch){
+                Point p = toWorldCoors(touch.getX(), touch.getY());
+                float x = p.getX();
+                float y = p.getY();
+                x = (int) (x / 64);
+                y = (int) (y / 32);
+                Tile tile = tiles[(int) y][(int) x];
+                if (!tile.free) {
+                    Tower t = getTower((int) x, (int) y);
+                    t.tapped = !t.tapped;
+                    p = toScreenCoors(x * 64 + 32, (y + 1) * 32);
+                    setShop(t, p.getX(), p.getY());
+                } else if (tile.buildable) {
+                    if (gold >= BasicTower.fixedprice) {
+                        BasicTower t = new BasicTower(x, y);
+                        addEntity(t);
+                        gold -= BasicTower.fixedprice;
+                        tile.free = false;
+                    }
                 }
             }
 

@@ -85,6 +85,10 @@ public class Container extends Widget implements Clickable {
             return null;
     }
 
+    public void tap(Touch touch){
+
+    }
+
     /**
      * Проверка события свайпа виджета
      *
